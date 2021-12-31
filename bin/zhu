@@ -1,0 +1,60 @@
+#! /usr/bin/env node
+console.log("zhu-cli-----")
+
+
+// 1) 配置可执行命令commander
+const program = require('commander')
+// const chalk = require('chalk')
+// 核心功能： 1.创建项目  2.更改配置文件  3.ui界面 @vue/ui
+  // 万一重名了呢？强制创建的模式
+program
+    .command('create <app-name>')
+    .description('create a new project')
+    .option('-f, --force', 'overwrite target directory if it exists')
+    .action((name, cmd) => {
+      // 调用create模块去创建
+      require('../lib/create')(name, cmd)
+      // console.log(name, cmd)
+      // console.log('cmd---', cmd)
+    })
+
+    // vue config --get a
+    // vue config --set a 1
+program
+    .command('config [value]')
+    .description('inspect and modify the config')
+    .option('-g, --get <path>', 'get value from option')
+    .option('-s, --set <path> <value>')
+    .option('-d --delete <path>', 'delete option form config')
+    .action((value, cmd) => {
+      // 调用config模块去实现
+      console.log(value, cmd)
+    })
+
+program
+    .command('ui')
+    .description('start and open mt-cli ui')
+    .option('-p, --port <port>', 'Port used for the UI Server')
+    .action((cmd) => {
+      // 调用ui模块实现
+      console.log(cmd)
+    })
+
+program
+    .version(`mt-cli @${require('../package.json').version}`)
+    .usage(`<command> [option]`)
+  // 解析用户执行命令传入的参数
+
+  program.on('--help', function() {
+    console.log()
+    // console.log(`Run ${chalk.cyan(`mt <command> --help`)} show detail`)
+    console.log(`Run mt <command> --help show detail`)
+    console.log()
+  })
+
+  program.parse(process.argv)
+
+
+// 2）我们要实现 脚手架 先做一个命令行交互的功能 inquireer
+// 3）将模板下载下来  download-git-repo
+// 4）根据用户的选择动态的生成内容  metalsmith
